@@ -30,10 +30,10 @@ public class ControlService extends AccessibilityService {
         this.rootNodeInfo = event.getSource();
         if (this.rootNodeInfo == null) return;
 
-        this.recycle(getRootInActiveWindow());
 
-        Log.e(TAG, "Ready to fetch " + (getRootInActiveWindow() == null));
-
+        Log.e(TAG, "Ready to fetch ");
+        AccessibilityNodeInfo fetching = getRootInActiveWindow();
+        if (fetching != null) this.recycle(getRootInActiveWindow());
     }
 
     public void recycle(AccessibilityNodeInfo info) {
@@ -60,7 +60,7 @@ public class ControlService extends AccessibilityService {
     }
 
     public void onReceive (AccessibilityNodeInfo info) {
-        Log.d(TAG, "Here");
+        if (true);
     }
 
     @Override
