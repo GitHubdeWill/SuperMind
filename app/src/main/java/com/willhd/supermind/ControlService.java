@@ -17,28 +17,7 @@ import android.widget.Toast;
 public class ControlService extends AccessibilityService {
     private final String TAG = "Control Service";
 
-
     private AccessibilityNodeInfo rootNodeInfo;
-
-
-    @TargetApi(23)
-    private boolean checkPermission() {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
-            return true;
-        }
-        try {
-            int hasWriteEPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (hasWriteEPermission != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "No Permission", Toast.LENGTH_LONG).show();
-                return false;
-            }
-            return true;
-        }catch (Exception e){
-            Log.e(TAG, "No Permission");
-            Toast.makeText(this, "No Permission", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-    }
 
     @Override
     public void onAccessibilityEvent (AccessibilityEvent event) {
@@ -51,14 +30,14 @@ public class ControlService extends AccessibilityService {
         this.rootNodeInfo = event.getSource();
         if (this.rootNodeInfo == null) return;
 
-        if((event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED)){
-            Log.e(TAG, "Ready to fetch");
-            if (getRootInActiveWindow() != null) recycle(getRootInActiveWindow());
-        }
+        this.recycle(getRootInActiveWindow());
+
+        Log.e(TAG, "Ready to fetch " + (getRootInActiveWindow() == null));
 
     }
 
     public void recycle(AccessibilityNodeInfo info) {
+        Log.d(TAG, "Recycling " + (info == null));
         if (info == null) return;
         if (info.getChildCount() == 0) {
             Log.d(TAG, "child:" + info.getClassName());
@@ -81,7 +60,7 @@ public class ControlService extends AccessibilityService {
     }
 
     public void onReceive (AccessibilityNodeInfo info) {
-
+        Log.d(TAG, "Here");
     }
 
     @Override
